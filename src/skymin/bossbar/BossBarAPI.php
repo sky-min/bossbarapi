@@ -7,11 +7,11 @@ use pocketmine\utils\SingletonTrait;
 
 use pocketmine\player\Player;
 
-use pocketmine\entity\{Entity, Attribute};
+use pocketmine\entity\{Entity, Attribute as Att};
 use pocketmine\data\bedrock\EntityLegacyIds;
 
 use pocketmine\network\mcpe\protocol\{AddActorPacket, BossEventPacket};
-use pocketmine\network\mcpe\protocol\types\entity\{EntityIds, EntityMetadataCollection, EntityMetadataProperties, EntityMetadataFlags};
+use pocketmine\network\mcpe\protocol\types\entity\{EntityIds, Attribute, EntityMetadataCollection, EntityMetadataProperties, EntityMetadataFlags};
 
 use function strtolower;
 
@@ -49,6 +49,7 @@ final class BossBarAPI{
 		$metadata->setGenericFlag(EntityMetadataFlags::NO_AI, true);
 		$metadata->setString(EntityMetadataProperties::NAMETAG, '');
 		$metadata->setFloat(EntityMetadataProperties::SCALE, 0.0);
+		$metadata->setLong(EntityMetadataProperties::LEAD_HOLDER_EID, -1);
 		$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_WIDTH, 0.0);
 		$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_HEIGHT, 0.0);
 		$this->players[] = strtolower($player->getName());
@@ -57,7 +58,11 @@ final class BossBarAPI{
 			$this->id,
 			EntityIds::SLIME,
 			$player->getPosition(),
-			[new Attribute(Attribute::HEALTH, 0.0, 100.0, 100.0)],
+			null,
+			0.0,
+			0.0,
+			0.0,
+			[new Attribute(Att::HEALTH, 0.0, 100.0, 100.0, 100.0)],
 			$metadata->getAll(),
 			[]
 		);

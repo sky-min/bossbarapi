@@ -1,0 +1,10 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/sky-min/bossbarapi
+build-by-default: true
+branches:
+- main
+projects:
+  bossbarapi:
+    path: ""
+    model: virion
+    type: library
+...

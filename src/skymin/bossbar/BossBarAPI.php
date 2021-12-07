@@ -4,16 +4,11 @@ declare(strict_types = 1);
 namespace skymin\bossbar;
 
 use pocketmine\utils\SingletonTrait;
-
 use pocketmine\player\Player;
-
 use pocketmine\entity\{Entity, Attribute as Att};
 use pocketmine\data\bedrock\EntityLegacyIds;
-
 use pocketmine\network\mcpe\protocol\{AddActorPacket, BossEventPacket};
 use pocketmine\network\mcpe\protocol\types\entity\{EntityIds, Attribute, EntityMetadataCollection, EntityMetadataProperties, EntityMetadataFlags};
-
-use function strtolower;
 
 final class BossBarAPI{
 	use SingletonTrait;

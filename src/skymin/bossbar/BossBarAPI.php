@@ -39,31 +39,33 @@ final class BossBarAPI{
 	public function sendBossBar(Player $player, string $title = '', float $percent = 1.0, int $color = self::COLOR_PURPLE) :void{
 		$this->hideBossBar($player);
 		$network = $player->getNetworkSession();
-		$metadata = new EntityMetadataCollection();
-		$metadata->setGenericFlag(EntityMetadataFlags::FIRE_IMMUNE, true);
-		$metadata->setGenericFlag(EntityMetadataFlags::SILENT, true);
-		$metadata->setGenericFlag(EntityMetadataFlags::INVISIBLE, true);
-		$metadata->setGenericFlag(EntityMetadataFlags::NO_AI, true);
-		$metadata->setString(EntityMetadataProperties::NAMETAG, '');
-		$metadata->setFloat(EntityMetadataProperties::SCALE, 0.0);
-		$metadata->setLong(EntityMetadataProperties::LEAD_HOLDER_EID, -1);
-		$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_WIDTH, 0.0);
-		$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_HEIGHT, 0.0);
-		$this->players[$player->getId()] = 0;
-		$pk = AddActorPacket::create(
-			$this->id ?? $this->id = Entity::nextRuntimeId(),
-			$this->id,
-			EntityIds::SLIME,
-			$player->getPosition(),
-			null,
-			0.0,
-			0.0,
-			0.0,
-			[new Attribute(Att::HEALTH, 0.0, 100.0, 100.0, 100.0)],
-			$metadata->getAll(),
-			[]
-		);
-		$network->sendDataPacket($pk);
+		if(!$this->isData($player)){
+			$metadata = new EntityMetadataCollection();
+			$metadata->setGenericFlag(EntityMetadataFlags::FIRE_IMMUNE, true);
+			$metadata->setGenericFlag(EntityMetadataFlags::SILENT, true);
+			$metadata->setGenericFlag(EntityMetadataFlags::INVISIBLE, true);
+			$metadata->setGenericFlag(EntityMetadataFlags::NO_AI, true);
+			$metadata->setString(EntityMetadataProperties::NAMETAG, '');
+			$metadata->setFloat(EntityMetadataProperties::SCALE, 0.0);
+			$metadata->setLong(EntityMetadataProperties::LEAD_HOLDER_EID, -1);
+			$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_WIDTH, 0.0);
+			$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_HEIGHT, 0.0);
+			$this->players[$player->getId()] = true;
+			$pk = AddActorPacket::create(
+				$this->id ?? $this->id = Entity::nextRuntimeId(),
+				$this->id,
+				EntityIds::SLIME,
+				$player->getPosition(),
+				null,
+				0.0,
+				0.0,
+				0.0,
+				[new Attribute(Att::HEALTH, 0.0, 100.0, 100.0, 100.0)],
+				$metadata->getAll(),
+				[]
+			);
+			$network->sendDataPacket($pk);
+		}
 		$pk = BossEventPacket::show($this->id, $title, $percent);
 		$pk->color = $color;
 		$network->sendDataPacket($pk);
@@ -71,7 +73,6 @@ final class BossBarAPI{
 	
 	public function hideBossBar(Player $player) :void{
 		if(!$this->isData($player)) return;
-		unset($this->players[$player->getId()]);
 		$player->getNetworkSession()->sendDataPacket(BossEventPacket::hide($this->id));
 	}
 	

@@ -22,24 +22,11 @@ final class BossBarAPI{
 	/** @var string[] */
 	private array $players = [];
 	
-	private bool $running = false;
-	
 	private function isData(Player $player) :bool{
 		return (isset($this->players[strtolower($player->getName())]));
 	}
 	
-	public function run() :void{
-		if(!$this->running){
-			$this->id = Entity::nextRuntimeId();
-			$this->running = true;
-		}
-	}
-	
 	public function sendBossBar(Player $player, string $title = '', float $percent = 100.0) :void{
-		if(!$this->running){
-			throw new \LogicException('is not running!');
-			return;
-		}
 		$this->removeBossBar($player);
 		$network = $player->getNetworkSession();
 		$metadata = new EntityMetadataCollection();
@@ -55,7 +42,7 @@ final class BossBarAPI{
 		$this->players[] = strtolower($player->getName());
 		$pk = AddActorPacket::create(
 			EntityLegacyIds::SLIME,
-			$this->id,
+			$this->id ?? $this->id = Entity::nextRuntimeId(),
 			EntityIds::SLIME,
 			$player->getPosition(),
 			null,

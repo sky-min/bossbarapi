@@ -7,6 +7,8 @@ use pocketmine\utils\SingletonTrait;
 
 use pocketmine\player\Player;
 
+use pocketmine\color\Color;
+
 use pocketmine\entity\{Entity, Attribute as Att};
 use pocketmine\data\bedrock\EntityLegacyIds;
 
@@ -19,15 +21,23 @@ final class BossBarAPI{
 	use SingletonTrait;
 	
 	private ?int $id = null;
-	/** @var string[] */
+	
 	private array $players = [];
 	
+	public const COLOR_PINK = 0;
+	public const COLOR_BLUE = 1;
+	public const COLOR_RED = 2;
+	public const COLOR_GREEN = 3 ;
+	public const COLOR_YELLOW = 4;
+	public const COLOR_PURPLE = 5;
+	public const COLOR_WHITE = 6;
+	
 	private function isData(Player $player) :bool{
-		return (isset($this->players[strtolower($player->getName())]));
+		return (isset($this->players[$player->getId()]));
 	}
 	
-	public function sendBossBar(Player $player, string $title = '', float $percent = 100.0) :void{
-		$this->removeBossBar($player);
+	public function sendBossBar(Player $player, string $title = '', float $percent = 1.0, int $color = self::COLOR_PURPLE) :void{
+		$this->hideBossBar($player);
 		$network = $player->getNetworkSession();
 		$metadata = new EntityMetadataCollection();
 		$metadata->setGenericFlag(EntityMetadataFlags::FIRE_IMMUNE, true);
@@ -39,10 +49,10 @@ final class BossBarAPI{
 		$metadata->setLong(EntityMetadataProperties::LEAD_HOLDER_EID, -1);
 		$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_WIDTH, 0.0);
 		$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_HEIGHT, 0.0);
-		$this->players[] = strtolower($player->getName());
+		$this->players[$player->getId()] = 0;
 		$pk = AddActorPacket::create(
-			EntityLegacyIds::SLIME,
 			$this->id ?? $this->id = Entity::nextRuntimeId(),
+			$this->id,
 			EntityIds::SLIME,
 			$player->getPosition(),
 			null,
@@ -54,12 +64,14 @@ final class BossBarAPI{
 			[]
 		);
 		$network->sendDataPacket($pk);
-		$network->sendDataPacket(BossEventPacket::show($this->id, $title, $percent));
+		$pk = BossEventPacket::show($this->id, $title, $percent);
+		$pk->color = $color;
+		$network->sendDataPacket($pk);
 	}
 	
-	public function removeBossBar(Player $player) :void{
+	public function hideBossBar(Player $player) :void{
 		if(!$this->isData($player)) return;
-		unset($this->players[strtolower($player->getName())]);
+		unset($this->players[$player->getId()]);
 		$player->getNetworkSession()->sendDataPacket(BossEventPacket::hide($this->id));
 	}
 	

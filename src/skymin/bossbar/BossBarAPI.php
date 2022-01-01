@@ -109,4 +109,10 @@ final class BossBarAPI{
 		$player->getNetworkSession()->sendDataPacket(BossEventPacket::healthPercent($this->id[$channel], $percent));
 	}
 	
+	public function deleteData(Player $player) : void{
+		if(isset($this->players[$player->getId()])){
+			unset($this->players[$player->getId()]);
+		}
+	}
+	
 }

@@ -29,10 +29,7 @@ use pocketmine\utils\SingletonTrait;
 
 use pocketmine\player\Player;
 
-use pocketmine\color\Color;
-
 use pocketmine\entity\{Entity, Attribute as Att};
-use pocketmine\data\bedrock\EntityLegacyIds;
 
 use pocketmine\network\mcpe\protocol\{AddActorPacket, BossEventPacket};
 use pocketmine\network\mcpe\protocol\types\entity\{

@@ -20,7 +20,7 @@
  * 　　＼/＿＿＿/
  *
  */
-
+ 
 declare(strict_types = 1);
 
 namespace skymin\bossbar;
@@ -95,18 +95,21 @@ final class BossBarAPI{
 	}
 	
 	public function hideBossBar(Player $player, int $channel = 0) :void{
-		if(!$this->isData($player, $channel)) return;
-		$player->getNetworkSession()->sendDataPacket(BossEventPacket::hide($this->id[$channel]));
+		if($this->isData($player, $channel)){
+			$player->getNetworkSession()->sendDataPacket(BossEventPacket::hide($this->id[$channel]));
+		}
 	}
 	
 	public function setTitle(Player $player, string $title, int $channel = 0) :void{
-		if(!$this->isData($player, $channel)) return;
-		$player->getNetworkSession()->sendDataPacket(BossEventPacket::title($this->id[$channel], $title));
+		if($this->isData($player, $channel)){
+			$player->getNetworkSession()->sendDataPacket(BossEventPacket::title($this->id[$channel], $title));
+		}
 	}
 	
 	public function setPercent(Player $player, float $percent, int $channel = 0) :void{
-		if(!$this->isData($player, $channel)) return;
-		$player->getNetworkSession()->sendDataPacket(BossEventPacket::healthPercent($this->id[$channel], $percent));
+		if($this->isData($player, $channel)){
+			$player->getNetworkSession()->sendDataPacket(BossEventPacket::healthPercent($this->id[$channel], $percent));
+		}
 	}
 	
 	public function deleteData(Player $player) : void{

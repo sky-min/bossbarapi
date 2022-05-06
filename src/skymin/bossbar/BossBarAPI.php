@@ -56,7 +56,7 @@ final class BossBarAPI{
 	public const COLOR_WHITE = 6;
 	
 	private function isData(Player $player, int $channel) :bool{
-		return (isset($this->players[$player->getId()][$channel]));
+		return isset($this->players[$player->getId()][$channel - 1]);
 	}
 	
 	public function sendBossBar(Player $player, string $title = '', int $channel = 0, float $percent = 1.0, int $color = self::COLOR_PURPLE) :void{

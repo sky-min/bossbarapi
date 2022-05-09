@@ -56,7 +56,7 @@ final class BossBarAPI{
 	public const COLOR_WHITE = 6;
 	
 	private function isData(Player $player, int $channel) :bool{
-		return isset($this->players[$player->getId()][$channel - 1]);
+		return isset($this->players[$player->getId()][$channel]);
 	}
 	
 	public function sendBossBar(Player $player, string $title = '', int $channel = 0, float $percent = 1.0, int $color = self::COLOR_PURPLE) :void{
@@ -73,7 +73,7 @@ final class BossBarAPI{
 			$metadata->setLong(EntityMetadataProperties::LEAD_HOLDER_EID, -1);
 			$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_WIDTH, 0.0);
 			$metadata->setFloat(EntityMetadataProperties::BOUNDING_BOX_HEIGHT, 0.0);
-			$this->players[$player->getId()][$channel - 1] = true;
+			$this->players[$player->getId()][$channel] = true;
 			$pk = AddActorPacket::create(
 				isset($this->id[$channel]) ? $this->id[$channel] : $this->id[$channel] = Entity::nextRuntimeId(),
 				$this->id[$channel],
@@ -114,6 +114,7 @@ final class BossBarAPI{
 	
 	public function deleteData(Player $player) : void{
 		if(isset($this->players[$player->getId()])){
+			$this->hideBossBar($player);
 			unset($this->players[$player->getId()]);
 		}
 	}

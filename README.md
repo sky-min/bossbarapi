@@ -34,7 +34,7 @@ BossBarAPI::getInstance()->setPercent(Player $player, float $percent, int $chann
 ```php
 BossBarAPI::getInstance()->hideBossBar(Player $player, int $channel = 0);
 ```
-## othor
+## others
 **If you want to automatically delete player channel information when player left**
 ```php
 BossBarHandler:: autoDeleteData(Plugin $plugin);

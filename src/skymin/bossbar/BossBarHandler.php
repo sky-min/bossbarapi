@@ -32,7 +32,7 @@ use pocketmine\event\player\PlayerQuitEvent;
 
 final class BossBarHandler{
 	
-	private static $delete = false;
+	private static bool $delete = false;
 	
 	public static function autoDeleteData(Plugin $plugin) :void{
 		if(self::$delete) return;

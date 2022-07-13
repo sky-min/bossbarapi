@@ -83,6 +83,7 @@ final class BossBarAPI{
 				0.0,
 				0.0,
 				0.0,
+				0.0,
 				[new Attribute(Att::HEALTH, 0.0, 100.0, 100.0, 100.0)],
 				$metadata->getAll(),
 				[]

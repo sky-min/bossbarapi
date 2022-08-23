@@ -37,13 +37,13 @@ BossBarAPI::getInstance()->hideBossBar(Player $player, int $channel = 0);
 ## others
 **If you want to automatically delete player channel information when player left**
 ```php
-BossBarHandler:: autoDeleteData(Plugin $plugin);
+BossBarHandler::autoDeleteData(Plugin $plugin);
 ```
 **Please be careful**
  [issue](https://github.com/sky-min/bossbarapi/issues/5)
 
 If the world is unloaded, please delete the player channel information and send bossbar again
 ```php
-BossBarAPI::getInstance()->deleteData(Playe $player);
+BossBarAPI::getInstance()->deleteData(Player $player);
 BossBarAPI::getInstance()->sendBossBar(...)
 ```

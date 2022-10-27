@@ -37,7 +37,8 @@ use pocketmine\network\mcpe\protocol\types\entity\{
 	Attribute,
 	EntityMetadataCollection,
 	EntityMetadataProperties,
-	EntityMetadataFlags
+	EntityMetadataFlags,
+	PropertySyncData
 };
 
 final class BossBarAPI{
@@ -86,6 +87,7 @@ final class BossBarAPI{
 				0.0,
 				[new Attribute(Att::HEALTH, 0.0, 100.0, 100.0, 100.0, [])],
 				$metadata->getAll(),
+				new PropertySyncData([], []),
 				[]
 			);
 			$network->sendDataPacket($pk);
